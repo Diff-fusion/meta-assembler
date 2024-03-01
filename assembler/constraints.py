@@ -138,14 +138,17 @@ class MemoryConstraint:
         transfer_size = gen_transfer_size(self.transfer_size, modifiers)
         if arg.offset.type == ArgumentType.Constant:
             val = arg.offset.constant
-            if val % 2**transfer_size != 0:
-                logger.critical("Offset (%d) must be multiple of transfer size %d", val, 2**transfer_size)
+            if arg.post_increment and (val == 1 or val == -1):
+                # adjust transfer size in case of short hand notation
+                val = (1 << transfer_size) * val
+            if val % (1 << transfer_size) != 0:
+                logger.critical("Offset (%d) must be multiple of transfer size %d", val, 1 << transfer_size)
                 exit()
             val >>= transfer_size
             if not self.offset.match_val(val):
                 logger.debug("Match memory failed, offset doesn't match")
                 return False
-        elif not self.offset.match(arg.offset, modifiers):
+        elif not self.offset.match(arg.offset, modifiers, arg.register):
             logger.debug("Match memory failed, offset doesn't match")
             return False
 

@@ -182,7 +182,11 @@ class MemoryEncoding:
 
         ret |= self.base.encode(arg, modifiers, main_reg)
         if arg.offset.type == ArgumentType.Constant:
-            arg.offset.constant >>= transfer_size
+            val = arg.offset.constant
+            if arg.post_increment and (val == 1 or val == -1):
+                # adjust transfer size in case of short hand notation
+                val = (1 << transfer_size) * val
+            val >>= transfer_size
         ret |= self.offset.encode(arg.offset, modifiers, main_reg)
 
         if arg.post_increment:

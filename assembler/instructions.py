@@ -23,6 +23,7 @@ INSTRUCTIONS = [
             Encoding2ri(0x0800),
             Encoding2rie(0x08000000, ["S", "T"]),
             # Extended GP
+            Encoding2riacue(0x84002010)
         ],
     ),
     Instruction(
@@ -67,7 +68,15 @@ INSTRUCTIONS = [
         "GETD",
         [
             Encoding1r3im(0xa800),
-            Encoding1r6ime(0xa8003000),
+        ]
+    ),
+    Instruction(
+        "GET",
+        [
+            Encoding1r6ime(0xa8001000),
+            Encoding2r6ime(0xa8001000),
+            Encoding1rmoe(0xa8000000),
+            Encoding2rmoe(0xa8000000),
         ]
     ),
     # TODO: MGET, MSET
@@ -125,7 +134,16 @@ INSTRUCTIONS = [
         "SETD",
         [
             Encoding1r3im(0xa000),
-            Encoding1r6ime(0xa0003000),
+        ],
+        swap_args=True,
+    ),
+    Instruction(
+        "SET",
+        [
+            Encoding1r6ime(0xa0001000),
+            Encoding2r6ime(0xa0001000),
+            Encoding1rmoe(0xa0000000),
+            Encoding2rmoe(0xa0000000),
         ],
         swap_args=True,
     ),
@@ -175,5 +193,41 @@ INSTRUCTIONS = [
             Encoding2ri(0x4800, ["M"]),
             Encoding2rie(0x48000000, ["M", "S", "T"]),
         ],
+    ),
+    Instruction(
+        "LSL",
+        [
+            Encoding3rs(0x5000),
+            Encoding2ri5s(0x5400),
+            Encoding3rse(0x50000000),
+            Encoding2ri5se(0x54000000),
+        ]
+    ),
+    Instruction(
+        "LSR",
+        [
+            Encoding3rs(0x5001),
+            Encoding2ri5s(0x5401),
+            Encoding3rse(0x50010000),
+            Encoding2ri5se(0x54010000),
+        ]
+    ),
+    Instruction(
+        "ASL",
+        [
+            Encoding3rs(0x5002),
+            Encoding2ri5s(0x5402),
+            Encoding3rse(0x50020000),
+            Encoding2ri5se(0x54020000),
+        ]
+    ),
+    Instruction(
+        "ASR",
+        [
+            Encoding3rs(0x5003),
+            Encoding2ri5s(0x5403),
+            Encoding3rse(0x50030000),
+            Encoding2ri5se(0x54030000),
+        ]
     ),
 ]

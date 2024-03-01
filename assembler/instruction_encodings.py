@@ -49,7 +49,7 @@ class Encoding:
     @classmethod
     def gen_constraints(cls):
         cls.constraints = []
-        main_reg = cls.args_encoding[cls.main_reg] if cls.main_reg else None
+        main_reg = cls.args_encoding[cls.main_reg] if cls.main_reg is not None else None
         for encoding in cls.args_encoding:
             cls.constraints.append(encoding.constraint(main_reg))
 
@@ -343,6 +343,16 @@ class Encoding2rcue(Encoding):
         RE(UCX, 18, 2, split_base=11, split_size=3, unit_base=4, unit_size=4),
         ]
 
+## 2 register address cross unit immediated extended
+class Encoding2riacue(Encoding):
+    type = EncodingType.Extended
+    main_reg = 1
+    args_encoding = [
+        RE(UCX, 23, 2, split_base=12, split_size=1, unit_base=0, unit_size=4),
+        RE(UCA, 20, 2, split_base=10, split_size=2, unit_base=25, unit_size=1, pc_bit=22),
+        IE(17, 3, split_base=5, split_size=5, sign_extend=0)
+        ]
+
 ## Encodings with O2R (operand 2 replace)
 
 ## 2 register source core
@@ -362,6 +372,49 @@ class Encoding2rso2re(Encoding):
         RE(UCD, 22, 3, unit_base=25, unit_size=1, split_base=8, split_size=2),
         RE(UnitConstraint.O2R, 17, 5),
         ]
+
+## Shift encodings
+class Encoding3rs(Encoding):
+    type = EncodingType.Core
+    main_reg = 1
+    args_encoding = [
+        RE(UCS, 7, 3),
+        RE(UCD, 5, 2, unit_base=10, unit_size=1),
+        RE(UCS, 2, 3),
+        ]
+
+class Encoding2ri5s(Encoding):
+    type = EncodingType.Core
+    main_reg = 1
+    args_encoding = [
+        RE(UCS),
+        RE(UCD, 7, 3, unit_base=10, unit_size=1),
+        IE(2, 5, sign_extend=False)
+        ]
+
+class Encoding3rse(Encoding):
+    type = EncodingType.Extended
+    main_reg = 1
+    args_encoding = [
+        RE(UCS, 23, 3),
+        RE(UCD, 21, 2, split_base=9, split_size=3, unit_base=26, unit_size=1),
+        RE(UCS, 18, 3, split_base=7, split_size=2),
+        ]
+    modifiers = {
+        "S": 13,
+        }
+
+class Encoding2ri5se(Encoding):
+    type = EncodingType.Extended
+    main_reg = 1
+    args_encoding = [
+        RE(UCS, 23, 3),
+        RE(UCD, 7, 5, unit_base=26, unit_size=1),
+        IE(18, 5, sign_extend=False)
+        ]
+    modifiers = {
+        "S": 13,
+        }
 
 # Branches
 class Encoding10i(Encoding):
@@ -417,8 +470,48 @@ class Encoding1r6ime(Encoding):
         ME(
             RE(UCX, 21, 2, split_base=9, split_size=1, unit_base=3, unit_size=2),
             IE(18, 3, split_base=6, split_size=3, force_signed=True),
-            transfer_size=2,
+            transfer_bits=[11, 13],
             increment = [5, 0],
+            )
+        ]
+
+class Encoding2r6ime(Encoding):
+    type = EncodingType.Extended
+    main_reg = 0
+    args_encoding = [
+        RE(UCX, 23, 3, split_base=10, split_size=1, unit_base=16, unit_size=2, split_unit_base=1, split_unit_size=2),
+        RE(UCO),
+        ME(
+            RE(UCX, 21, 2, split_base=9, split_size=1, unit_base=3, unit_size=2),
+            IE(18, 3, split_base=6, split_size=3, force_signed=True),
+            transfer_bits=[11, 13],
+            increment = [5, 0],
+            )
+        ]
+
+class Encoding1rmoe(Encoding):
+    type = EncodingType.Extended
+    args_encoding = [
+        RE(UCX, 23, 3, split_base=10, split_size=1, unit_base=16, unit_size=2, split_unit_base=1, split_unit_size=2),
+        ME(
+            RE(UCX, 21, 2, split_base=9, split_size=1, unit_base=18, unit_size=2),
+            RE(UCS, 4, 5),
+            transfer_bits=[11, 13],
+            increment = [3, 0],
+            )
+        ]
+
+class Encoding2rmoe(Encoding):
+    type = EncodingType.Extended
+    main_reg = 0
+    args_encoding = [
+        RE(UCX, 23, 3, split_base=10, split_size=1, unit_base=16, unit_size=2, split_unit_base=1, split_unit_size=2),
+        RE(UCO),
+        ME(
+            RE(UCX, 21, 2, split_base=9, split_size=1, unit_base=18, unit_size=2),
+            RE(UCS, 4, 5),
+            transfer_bits=[11, 13],
+            increment = [3, 0],
             )
         ]
 

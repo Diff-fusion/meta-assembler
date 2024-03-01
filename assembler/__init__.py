@@ -29,7 +29,7 @@ def encode_op(op: str, args: list[str]):
         print(f"Found no encoding for {op} with args {parsed_args}")
         exit()
 
-    print("Choose encoding", encoding)
+    #print("Choose encoding", encoding)
     encoded = encoding.encode(i_args, modifiers)
     if encoding.type == EncodingType.Core:
         print(hex(encoded))
