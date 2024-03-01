@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass
 from .arguments import Argument, ArgumentType
-from .constraints import RegConstraint, ImmConstraint, UnitConstraint, MemoryConstraint
+from .constraints import RegConstraint, ImmConstraint, UnitConstraint, MemoryConstraint, PieceImmConstraint
 from .modifiers import gen_transfer_size
 from .registers import RegUnits, Register
 
@@ -139,6 +139,30 @@ class ImmediateEncoding:
         min = -2**(size-1) if self.sign_extend is not None or self.force_signed else 0
         max = 2**size if not self.force_signed else 2**(size-1)
         return ImmConstraint(min, max)
+
+@dataclass
+class PieceImmediateEncoding:
+    mapping: list[tuple[int, int, int]] # src (meta bits), dst (minim bits), size
+    extra_map: tuple[int, int] = None # map specific number from src (meta) to dst (minim) before encoding
+
+    def encode(self, arg: Argument, modifiers: list[str], *args):
+        constant = arg.constant
+        if self.extra_map is not None and constant == self.extra_map[0]:
+            constant = self.extra_map[1]
+        ret = 0
+        for src, dst, size in self.mapping:
+            # extract bits from source
+            val = (arg.constant >> src) & ((1<<size) - 1)
+            # set in destination
+            ret |= val << dst
+        return ret
+
+    def constraint(self, main_reg: "RegisterEncoding" = None) -> RegConstraint:
+        mask = 0
+        for src, dst, size in self.mapping:
+            # create mask that contains all representable bits
+            mask |= ((1<<size) - 1) << src
+        return PieceImmConstraint(mask, self.extra_map)
 
 @dataclass
 class MemoryEncoding:

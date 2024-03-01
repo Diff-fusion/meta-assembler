@@ -1,6 +1,6 @@
 import logging
 from enum import Enum, auto
-from .argument_encodings import RegisterEncoding, ImmediateEncoding, MemoryEncoding
+from .argument_encodings import RegisterEncoding, ImmediateEncoding, MemoryEncoding, PieceImmediateEncoding
 from .constraints import UnitConstraint
 from .modifiers import CONDITION_MAP, TRANSFER_MAP, gen_conditional
 from .registers import REGISTERS
@@ -420,6 +420,36 @@ class Encoding1r6ime(Encoding):
             transfer_size=2,
             increment = [5, 0],
             )
+        ]
+
+# Switch
+class EncodingSwitch(Encoding):
+    type = EncodingType.Core
+    args_encoding = [
+        PieceImmediateEncoding([
+            (1, 0, 3),
+            (9, 3, 1),
+            (16, 4, 2),
+            (22, 6, 2),
+            ],
+            extra_map=[0xffffff, 0xc3020e]
+            )
+        ]
+
+class EncodingSwitche(Encoding):
+    type = EncodingType.Extended
+    args_encoding = [
+        PieceImmediateEncoding([
+            (0, 0, 1),
+            (1, 16, 3),
+            (4, 1, 4),
+            (8, 5, 1),
+            (9, 19, 1),
+            (10, 6, 4),
+            (16, 20, 2),
+            (18, 10, 4),
+            (22, 22, 2),
+            ])
         ]
 
 # No Arguments

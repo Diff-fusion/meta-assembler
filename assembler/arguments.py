@@ -39,7 +39,10 @@ class Argument:
                 # TODO: allow other registers
                 self.as_register(REGISTERS[arg])
             case "#":
-                const = int(arg[1:])
+                if arg[1:3] == "0x":
+                    const = int(arg[1:], 16)
+                else:
+                    const = int(arg[1:])
                 # TODO: handle HI and LO
                 self.as_constant(const)
             case "[": # ]

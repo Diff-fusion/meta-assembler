@@ -100,6 +100,26 @@ class ImmConstraint:
         return True
 
 @dataclass
+class PieceImmConstraint:
+    mask: int
+    extra_map: tuple[int, int]
+
+    def match(self, arg: Argument, modifiers: list[str], *args):
+        if arg.type != ArgumentType.Constant:
+            logger.debug("Match piece constant failed, wrong argument type: %s", arg.type)
+            return False
+        if self.extra_map is not None and arg.constant == self.extra_map[0]:
+            return True
+        if arg.constant & (~self.mask) != 0:
+            logger.debug("Match piece constant failed, val 0x%x has bits ouf of mask 0x%x", arg.constant, self.mask)
+            return False
+        if self.extra_map is not None and arg.constant == self.extra_map[1]:
+            logger.debug("Match piece constatn failed, val 0x%x is in extra map", arg.constant)
+            return False
+        return True
+
+
+@dataclass
 class MemoryConstraint:
     base: RegConstraint
     offset: RegConstraint | ImmConstraint

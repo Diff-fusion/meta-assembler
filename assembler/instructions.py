@@ -22,6 +22,7 @@ INSTRUCTIONS = [
             Encoding3re(0x00000000, ["S"]),
             Encoding2ri(0x0800),
             Encoding2rie(0x08000000, ["S", "T"]),
+            # Extended GP
         ],
     ),
     Instruction(
@@ -57,7 +58,7 @@ INSTRUCTIONS = [
             Encoding2rs(0x7000),
             Encoding2rse(0x70000000),
             Encoding1ric(0x7400),
-            Encoding1riec(0x74000000),
+            Encoding1riec(0x74000000, ["M", "T"]),
             Encoding2rso2r(0x7001),
             Encoding2rso2re(0x70010000), # documentation says lsb should be 1
         ]
@@ -146,5 +147,33 @@ INSTRUCTIONS = [
         [
             Encoding2rcue(0x9cc00000),
         ]
+    ),
+    Instruction(
+        "SWITCH",
+        [
+            EncodingSwitch(0x9f00),
+            EncodingSwitche(0x9f000000),
+        ]
+    ),
+    Instruction(
+        "TST",
+        [
+            Encoding2rs(0x7800),
+            Encoding2rse(0x78000000),
+            Encoding1ric(0x7c00),
+            Encoding1riec(0x7c000000, ["M", "T"]),
+            Encoding2rso2r(0x7801),
+            Encoding2rso2re(0x78010000), # documentation says lsb should be 1
+        ]
+    ),
+    Instruction(
+        "XOR",
+        [
+            # Core GP
+            Encoding3r(0x4000),
+            Encoding3re(0x40000000, ["S"]),
+            Encoding2ri(0x4800, ["M"]),
+            Encoding2rie(0x48000000, ["M", "S", "T"]),
+        ],
     ),
 ]
