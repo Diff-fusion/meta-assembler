@@ -187,6 +187,7 @@ class MemoryEncoding:
                 # adjust transfer size in case of short hand notation
                 val = (1 << transfer_size) * val
             val >>= transfer_size
+            arg.offset.constant = val
         ret |= self.offset.encode(arg.offset, modifiers, main_reg)
 
         if arg.post_increment:

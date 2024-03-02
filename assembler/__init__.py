@@ -1,38 +1,70 @@
 import logging
 from .arguments import Argument
-from .instructions import INSTRUCTIONS
-from .instruction_encodings import EncodingType
+from .encoder import Encoder
 from .modifiers import parse_modifiers
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-def encode_op(op: str, args: list[str]):
-    parsed_args = []
-    for arg in args:
-        parsed_arg = Argument.from_str(arg.strip(","))
-        parsed_args.append(parsed_arg)
+class Assembler:
+    cursor: int
+    labels: dict[str, int]
+    instructions: list[Encoder]
 
-    for instruction in INSTRUCTIONS:
-        if not op.startswith(instruction.name):
-            continue
-        modifiers = parse_modifiers(op[len(instruction.name):])
-        i_args = parsed_args[::-1] if instruction.swap_args else parsed_args
-        for encoding in instruction.encodings:
-            if encoding.match(i_args, modifiers):
-                break
+    def __init__(self):
+        pass
+
+    def process_label(self, label: str):
+        if label in self.labels:
+            logger.critical("Label %s already defined at 0x%x", label, self.labels[label])
+            exit()
+        assert self.cursor & 1 == 0
+        if self.cursor & 2 != 0:
+            # align all labels to 4 bytes to make jumps easyer
+            self.process_line("NOP")
+        self.labels[label] = self.cursor
+
+    def process_line(self, line: str):
+        line = line.split("!", 1)[0].strip()
+        if not line:
+            return
+
+        if line.endswith(":"):
+            self.process_label(line[:-1])
+            return
+
+        op, *args = line.split()
+        logger.info("Op: %s, Args: %s", op, args)
+
+        encoder = Encoder(self.cursor, op)
+        self.instructions.append(encoder)
+        encoder.parse_args(args)
+
+        if encoder.label is None:
+            # no labels
+            encoder.encode()
+            self.cursor += encoder.size
         else:
-            logger.debug("Found no encoding for %s in %s, trying other instructions", op, instruction)
-            continue
-        break
-    else:
-        print(f"Found no encoding for {op} with args {parsed_args}")
-        exit()
+            # label, reserve 4 bytes
+            self.cursor += 4
 
-    #print("Choose encoding", encoding)
-    encoded = encoding.encode(i_args, modifiers)
-    if encoding.type == EncodingType.Core:
-        print(hex(encoded))
-    else:
-        print(hex(encoded & 0xFFFF), hex(encoded >> 16))
+    def fill_labels(self):
+        fillers = []
+        for instruction in self.instructions:
+            if instruction.label is not None:
+                instruction.resolve_label(self.labels)
+                instruction.encode()
+                if instruction.size == 2:
+                    # pad with nop
+                    filler = Encoder(instruction.address + 2, "NOP")
+                    filler.encode()
+                    fillers.append(filler)
+        self.instructions += fillers
 
+    def assemble(self, assembly: str):
+        self.cursor = 0
+        self.labels = {}
+        self.instructions = []
+        for line in assembly.splitlines():
+            self.process_line(line)
+        self.fill_labels()
