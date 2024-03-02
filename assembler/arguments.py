@@ -56,7 +56,7 @@ class Argument:
     def resolve_label(self, labels: dict[str, int], address: int):
         val = labels.get(self.name)
         if val is None:
-            logger.critical("Label %s is not defined", label)
+            logger.critical("Label %s is not defined", self.name)
             exit()
         self.as_constant(self.extract_bits.extract(val - address))
 

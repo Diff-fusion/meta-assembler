@@ -122,7 +122,6 @@ class ImmediateEncoding:
     split_size: int = None
 
     def encode(self, arg: Argument, modifiers: list[str], *args):
-        #TODO: handle sign extend
         value = arg.constant
         ret = 0
         value_base = value & ((1<<self.size) - 1)
@@ -131,6 +130,9 @@ class ImmediateEncoding:
         if self.split_base is not None:
             value_base = (value >> self.size) & ((1<<self.split_size) - 1)
             ret |= value_base << self.split_base
+
+        if value < 0 and not self.force_signed:
+            ret |= 1 << self.sign_extend
 
         return ret
 
