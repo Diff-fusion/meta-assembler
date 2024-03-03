@@ -27,7 +27,6 @@ class Assembler:
         if label in self.labels:
             logger.critical("Label %s already defined at 0x%x", label, self.labels[label])
             exit()
-        self.align()
         self.labels[label] = self.cursor
 
     def process_line(self, line: str):
@@ -41,9 +40,6 @@ class Assembler:
 
         op, *args = line.split()
         logger.info("Op: %s, Args: %s", op, args)
-
-        if op in BRANCH_RELATIVE_INSTRUCTIONS:
-            self.align()
 
         encoder = Encoder(self.cursor, op)
         self.instructions.append(encoder)
