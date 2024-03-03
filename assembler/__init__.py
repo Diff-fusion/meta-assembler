@@ -11,6 +11,7 @@ class Assembler:
     cursor: int
     labels: dict[str, int]
     instructions: list[Encoder]
+    encoded: bytes
 
     def __init__(self):
         pass
@@ -60,7 +61,7 @@ class Assembler:
         fillers = []
         for instruction in self.instructions:
             if instruction.label is not None:
-                instruction.resolve_label(self.labels, instruction.op in BRANCH_RELATIVE_INSTRUCTIONS)
+                instruction.resolve_label(self.labels)
                 instruction.encode()
                 if instruction.size == 2:
                     # pad with nop
@@ -70,6 +71,12 @@ class Assembler:
         self.instructions += fillers
         self.instructions.sort(key=lambda x: x.address)
 
+    def create_encoded(self):
+        self.encoded = b""
+        for instruction in self.instructions:
+            self.encoded += instruction.encoded.to_bytes(instruction.size, "little")
+
+
     def assemble(self, assembly: str):
         self.cursor = 0
         self.labels = {}
@@ -77,6 +84,7 @@ class Assembler:
         for line in assembly.splitlines():
             self.process_line(line)
         self.fill_labels()
+        self.create_encoded()
 
     def print_instructions(self):
         for instruction in self.instructions:

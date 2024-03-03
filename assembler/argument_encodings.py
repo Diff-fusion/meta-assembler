@@ -120,9 +120,10 @@ class ImmediateEncoding:
     force_signed: bool = False
     split_base: int = None
     split_size: int = None
+    shift: int = 0
 
     def encode(self, arg: Argument, modifiers: list[str], *args):
-        value = arg.constant
+        value = arg.constant >> self.shift
         ret = 0
         value_base = value & ((1<<self.size) - 1)
         ret |= value_base << self.base
@@ -140,7 +141,7 @@ class ImmediateEncoding:
         size = self.size + (self.split_size or 0)
         min = -2**(size-1) if self.sign_extend is not None or self.force_signed else 0
         max = 2**size if not self.force_signed else 2**(size-1)
-        return ImmConstraint(min, max)
+        return ImmConstraint(min, max, self.shift)
 
 @dataclass
 class PieceImmediateEncoding:

@@ -86,6 +86,7 @@ class RegConstraint:
 class ImmConstraint:
     min: int
     max: int
+    shift: int = 0
 
     def match(self, arg: Argument, modifiers: list[str], *args):
         if arg.type != ArgumentType.Constant:
@@ -94,6 +95,10 @@ class ImmConstraint:
         return self.match_val(arg.constant)
 
     def match_val(self, val: int):
+        if val & ((1 << self.shift) - 1) != 0:
+            logger.debug("Match constant failed, value %d is shifted by %d but has lower bits set", val, self.shift)
+            return False
+        val >>= self.shift
         if val not in range(self.min, self.max):
             logger.debug("Match constant failed, argument: %d not in range %d %d", val, self.min, self.max)
             return False

@@ -21,8 +21,8 @@ class Encoder:
         self.args = []
         self.label = None
 
-    def resolve_label(self, labels: dict[str, int], branch_relative: bool):
-        self.args[self.label].resolve_label(labels, self.address, branch_relative)
+    def resolve_label(self, labels: dict[str, int]):
+        self.args[self.label].resolve_label(labels, self.address)
 
     def parse_args(self, args: list[str]):
         self.args = []

@@ -419,11 +419,11 @@ class Encoding2ri5se(Encoding):
 # Branches
 class Encoding10i(Encoding):
     type = EncodingType.Core
-    args_encoding = [IE(0, 10, force_signed=True)]
+    args_encoding = [IE(0, 10, force_signed=True, shift=1)]
 
 class Encoding19ie(Encoding):
     type = EncodingType.Extended
-    args_encoding = [IE(21, 5, split_base=0, split_size=14, force_signed=True)]
+    args_encoding = [IE(21, 5, split_base=0, split_size=14, force_signed=True, shift=1)]
     modifiers = {
         "R": 16
         }
@@ -431,7 +431,7 @@ class Encoding19ie(Encoding):
 
 class Encoding5i(Encoding):
     type = EncodingType.Core
-    args_encoding = [IE(5, 5, force_signed=True)]
+    args_encoding = [IE(5, 5, force_signed=True, shift=1)]
     modifiers = {
         "R": 0
         }
@@ -441,14 +441,14 @@ class Encoding1r5i(Encoding):
     type = EncodingType.Core
     args_encoding = [
         RE(UCX, reg=REGISTERS["D1RtP"]),
-        IE(0, 10, force_signed=True),
+        IE(0, 10, force_signed=True, shift=1),
         ]
 
 class Encoding1r19ie(Encoding):
     type = EncodingType.Extended
     args_encoding = [
         RE(UCX, 0, 3, unit_base=3, unit_size=2),
-        IE(16, 10, split_base=5, split_size=9, force_signed=True),
+        IE(16, 10, split_base=5, split_size=9, force_signed=True, shift=1),
         ]
 
 # Memory Access
