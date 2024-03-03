@@ -53,12 +53,17 @@ class Argument:
         self.type = ArgumentType.Label
         self.name = name
 
-    def resolve_label(self, labels: dict[str, int], address: int):
+    def resolve_label(self, labels: dict[str, int], address: int, branch_relative: bool):
         val = labels.get(self.name)
         if val is None:
             logger.critical("Label %s is not defined", self.name)
             exit()
-        self.as_constant(self.extract_bits.extract(val - address))
+        val -= address # take values pc relative
+        if branch_relative:
+            # branches jump by 4 bytes
+            assert val & 0x3 == 0
+            val >>= 2
+        self.as_constant(self.extract_bits.extract(val))
 
     @classmethod
     def from_str(cls, arg: str):

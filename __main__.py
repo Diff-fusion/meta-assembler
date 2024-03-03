@@ -8,6 +8,7 @@ def main():
     assembly = open(sys.argv[1]).read()
     asm = Assembler()
     asm.assemble(assembly)
+    asm.print_instructions()
 
 
 if __name__ == '__main__':

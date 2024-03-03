@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from .instruction_encodings import *
 
+BRANCH_RELATIVE_INSTRUCTIONS = ["B", "CALLR"]
 
 @dataclass
 class Instruction:
@@ -43,7 +44,7 @@ INSTRUCTIONS = [
             Encoding10i(0x9400),
             Encoding5i(0x9000, ["R"], cc=True),
             Encoding19ie(0x90000000, ["R"], cc=True),
-            ]
+        ]
     ),
     Instruction(
         "CALLR",
@@ -51,7 +52,7 @@ INSTRUCTIONS = [
             # Core GP
             Encoding1r5i(0x9800),
             Encoding1r19ie(0x98000000),
-            ]
+        ]
     ),
     Instruction(
         "CMP",
