@@ -29,6 +29,13 @@ class Assembler:
             exit()
         self.labels[label] = self.cursor
 
+    def process_command(self, command: str, args: list[str]):
+        match command:
+            case "align4":
+                self.align()
+            case _:
+                logger.warning("Undefined command %s", command)
+
     def process_line(self, line: str):
         line = line.split("!", 1)[0].strip()
         if not line:
@@ -36,6 +43,11 @@ class Assembler:
 
         if line.endswith(":"):
             self.process_label(line[:-1])
+            return
+
+        if line.startswith("."):
+            command, *args = line[1:].split()
+            self.process_command(command, args)
             return
 
         op, *args = line.split()
