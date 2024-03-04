@@ -4,7 +4,6 @@ from .encoder import Encoder
 from .instructions import BRANCH_RELATIVE_INSTRUCTIONS
 from .modifiers import parse_modifiers
 
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 class Assembler:
