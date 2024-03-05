@@ -333,6 +333,27 @@ class Encoding1riec(Encoding):
         "T": 0,
         }
 
+# Data unit encodings
+
+## 3 register extended
+class Encoding3redu(Encoding):
+    type = EncodingType.Extended
+    main_reg = 1
+    args_encoding = [
+        RE(UCS, 10, 3),
+        RE(UCD, 22, 3, unit_base=25, unit_size=1, split_base=8, split_size=2),
+        RE(UCS, 17, 5),
+        ]
+
+## 2 register extended
+class Encoding2redu(Encoding):
+    type = EncodingType.Extended
+    main_reg = 1
+    args_encoding = [
+        RE(UCS, 10, 3),
+        RE(UCD, 22, 3, unit_base=25, unit_size=1, split_base=8, split_size=2),
+        ]
+
 # Address and Data
 
 ## 2 register cross unit extended
@@ -354,6 +375,16 @@ class Encoding2riacue(Encoding):
         ]
 
 ## Encodings with O2R (operand 2 replace)
+
+## 3 register extended
+class Encoding3reduo2r(Encoding):
+    type = EncodingType.Extended
+    main_reg = 1
+    args_encoding = [
+        RE(UCS, 10, 3),
+        RE(UCD, 22, 3, unit_base=25, unit_size=1, split_base=8, split_size=2),
+        RE(UnitConstraint.O2R, 17, 5),
+        ]
 
 ## 2 register source core
 class Encoding2rso2r(Encoding):

@@ -231,4 +231,56 @@ INSTRUCTIONS = [
             Encoding2ri5se(0x54030000),
         ]
     ),
+    Instruction(
+        "ABS",
+        [
+            Encoding2redu(0x70000014),
+        ]
+    ),
+    Instruction(
+        "FFB",
+        [
+            Encoding2redu(0x70000002),
+        ]
+    ),
+    Instruction(
+        "MAX",
+        [
+            Encoding3redu(0x70000012),
+        ]
+    ),
+    Instruction(
+        "MIN",
+        [
+            Encoding3redu(0x70000010),
+        ]
+    ),
+    # not supported by qemu
+    Instruction(
+        "MORT",
+        [
+            Encoding3redu(0x7000004c),
+            Encoding3reduo2r(0x7001004c),
+        ]
+    ),
+    Instruction(
+        "NMIN",
+        [
+            Encoding3redu(0x70000016),
+        ]
+    ),
+    Instruction(
+        "NORM",
+        [
+            Encoding2redu(0x70000004),
+        ]
+    ),
+    # not supported by qemu
+    Instruction(
+        "VPACK",
+        [
+            Encoding3redu(0x7000000c),
+            Encoding3reduo2r(0x7001000c),
+        ]
+    ),
 ]
