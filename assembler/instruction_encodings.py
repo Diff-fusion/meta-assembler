@@ -98,8 +98,11 @@ class Encoding:
             assert modifier in self.modifiers
             encoded_val |= 1 << self.modifiers[modifier]
 
-        if self.type == EncodingType.Extended:
-            encoded_val |= 0xc000
+        match self.type:
+            case EncodingType.Extended:
+                encoded_val |= 0xc000
+            case EncodingType.Long:
+                encoded_val |= 0xb000
         return encoded_val
 
 RE = RegisterEncoding
@@ -112,6 +115,17 @@ UCO = UnitConstraint.Other
 UCA = UnitConstraint.Address
 UCA0 = UnitConstraint.Address0
 UCD = UnitConstraint.Data
+
+# Control encodings
+class Encoding1r16ictl(Encoding):
+    type = EncodingType.Long
+    args_encoding = [
+        RE(UnitConstraint.Control, 5, 3),
+        IE(19, 11, split_base=0, split_size=5, sign_extend=17)
+        ]
+    modifiers = {
+        "T": 16,
+        }
 
 # Address encodings
 

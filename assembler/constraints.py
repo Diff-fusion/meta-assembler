@@ -3,7 +3,7 @@ from enum import Enum, auto
 from dataclasses import dataclass
 from .arguments import Argument, ArgumentType
 from .modifiers import gen_transfer_size
-from .registers import RegUnits, Register, ADDRESS_UNITS, DATA_UNITS
+from .registers import RegUnits, Register, CONTROL_REGS, ADDRESS_UNITS, DATA_UNITS
 
 logger = logging.getLogger(__name__)
 
@@ -11,6 +11,7 @@ class UnitConstraint(Enum):
     Any = 1
     Same = auto()
     Other = auto()
+    Control = auto()
     Address = auto()
     Data = auto()
     O2R = auto()
@@ -28,6 +29,9 @@ class UnitConstraint(Enum):
                 if unit in ADDRESS_UNITS and main_unit in ADDRESS_UNITS and unit != main_unit:
                     return True
                 if unit in DATA_UNITS and main_unit in DATA_UNITS and unit != main_unit:
+                    return True
+            case UnitConstraint.Control:
+                if unit == RegUnits.Control:
                     return True
             case UnitConstraint.O2R:
                 assert main_unit is not None

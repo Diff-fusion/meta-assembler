@@ -58,7 +58,7 @@ class RegisterEncoding:
             return 0
         unit = arg.register.unit
         num = arg.register.number
-        if unit == RegUnits.PC:
+        if unit == RegUnits.PC and self.pc_bit is not None:
             return 1 << self.pc_bit
         ret = 0
         if self.unit_base is not None:

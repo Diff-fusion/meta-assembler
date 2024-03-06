@@ -94,6 +94,7 @@ INSTRUCTIONS = [
             Encoding1rie(0x08020000, ["S"]),
             # MOV Ux.r,Uy.r: core encoding is madness, only support extended
             Encoding2rcue(0x9c800000),
+            Encoding1r16ictl(0x40000900),
         ]
     ),
     Instruction(
