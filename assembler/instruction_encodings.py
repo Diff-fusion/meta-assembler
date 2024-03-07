@@ -446,8 +446,10 @@ class Encoding3rse(Encoding):
         RE(UCS, 18, 3, split_base=7, split_size=2),
         ]
     modifiers = {
+        "P": 6,
         "S": 13,
         }
+    L2 = 4
 
 class Encoding2ri5se(Encoding):
     type = EncodingType.Extended
@@ -458,8 +460,43 @@ class Encoding2ri5se(Encoding):
         IE(18, 5, sign_extend=False)
         ]
     modifiers = {
+        "P": 6,
         "S": 13,
         }
+    L2 = 4
+
+# DSP encodings
+class Encoding3rdspe(Encoding):
+    type = EncodingType.Extended
+    main_reg = 1
+    args_encoding = [
+        RE(UCS, 23, 3),
+        RE(UCD, 20, 3, unit_base=26, unit_size=1, split_base=10, split_size=2),
+        RE(UCS, 17, 3, split_base=8, split_size=2),
+        ]
+    modifiers = {
+        "C": 3,
+        "S": 13,
+        "U": 16,
+        "X": 6,
+        }
+    L2 = 4
+
+class Encoding3rdsp8e(Encoding):
+    type = EncodingType.Extended
+    main_reg = 1
+    args_encoding = [
+        RE(UCS, 23, 3),
+        RE(UCD, 20, 3, unit_base=26, unit_size=1, split_base=10, split_size=2),
+        RE(UCS, 17, 3, split_base=8, split_size=2),
+        ]
+    modifiers = {
+        "S": 13,
+        "T": 16,
+        "U": 5,
+        "X": 6,
+        }
+    L2 = 3
 
 # Branches
 class Encoding10i(Encoding):

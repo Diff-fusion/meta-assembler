@@ -200,36 +200,36 @@ INSTRUCTIONS = [
         "LSL",
         [
             Encoding3rs(0x5000),
-            Encoding2ri5s(0x5400),
-            Encoding3rse(0x50000000),
-            Encoding2ri5se(0x54000000),
+            Encoding2ri5s(0x5800),
+            Encoding3rse(0x50000000, ["P", "S"]),
+            Encoding2ri5se(0x58000000, ["P", "S"]),
         ]
     ),
     Instruction(
         "LSR",
         [
             Encoding3rs(0x5001),
-            Encoding2ri5s(0x5401),
-            Encoding3rse(0x50010000),
-            Encoding2ri5se(0x54010000),
+            Encoding2ri5s(0x5801),
+            Encoding3rse(0x50010000, ["P", "S"]),
+            Encoding2ri5se(0x58010000, ["P", "S"]),
         ]
     ),
     Instruction(
         "ASL",
         [
             Encoding3rs(0x5002),
-            Encoding2ri5s(0x5402),
-            Encoding3rse(0x50020000),
-            Encoding2ri5se(0x54020000),
+            Encoding2ri5s(0x5802),
+            Encoding3rse(0x50020000, ["P", "S"]),
+            Encoding2ri5se(0x58020000, ["P", "S"]),
         ]
     ),
     Instruction(
         "ASR",
         [
             Encoding3rs(0x5003),
-            Encoding2ri5s(0x5403),
-            Encoding3rse(0x50030000),
-            Encoding2ri5se(0x54030000),
+            Encoding2ri5s(0x5803),
+            Encoding3rse(0x50030000, ["P", "S"]),
+            Encoding2ri5se(0x58030000, ["P", "S"]),
         ]
     ),
     Instruction(
@@ -282,6 +282,19 @@ INSTRUCTIONS = [
         [
             Encoding3redu(0x7000000c),
             Encoding3reduo2r(0x7001000c),
+        ]
+    ),
+    # DSP
+    Instruction(
+        "DSPMUL8",
+        [
+            Encoding3rdsp8e(0x40000084),
+        ]
+    ),
+    Instruction(
+        "DSPMUL",
+        [
+            Encoding3rdspe(0x60000080),
         ]
     ),
 ]

@@ -8,6 +8,11 @@ MODIFIERS = [
     "MT", # mask top value
     "MB", # mask bottom value
     "R", # repeat
+    # custom flags
+    "P", # DSP
+    "C", # modified for complex numbers
+    "X", # split 8 multi for source 1
+    "U", # unsigned
     ]
 
 TRANSFER_MAP = {"B": 0, "W": 1, "D": 2, "L": 3}
