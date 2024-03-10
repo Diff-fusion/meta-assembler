@@ -33,8 +33,10 @@ INSTRUCTIONS = [
             # Core GP
             Encoding3r(0x2000),
             Encoding3re(0x20000000, ["S"]),
+            Encoding3rdsp8e(0x20000000, ["P", "S"]),
             Encoding2ri(0x2800, ["M"]),
             Encoding2rie(0x28000000, ["M", "S", "T"]),
+            Encoding2rie(0x28010001, ["P", "S"]),
         ],
     ),
     Instruction(
@@ -89,7 +91,7 @@ INSTRUCTIONS = [
             Encoding1ria(0x8402),
             Encoding1riae(0x84020000),
             Encoding2r(0x0001),
-            Encoding2re(0x00010000, ["S"]),
+            Encoding2re(0x00010000, ["S", "P"]),
             Encoding1ri(0x0802),
             Encoding1rie(0x08020000, ["S"]),
             # MOV Ux.r,Uy.r: core encoding is madness, only support extended
@@ -126,8 +128,10 @@ INSTRUCTIONS = [
             # Core GP
             Encoding3r(0x3000),
             Encoding3re(0x30000000, ["S"]),
+            Encoding3rdsp8e(0x30000000, ["P", "S"]),
             Encoding2ri(0x3800, ["M"]),
             Encoding2rie(0x38000000, ["M", "S", "T"]),
+            Encoding2rie(0x38010001, ["P", "S"]),
         ],
     ),
     Instruction("RTH", [EncodingN(0x9cef)]),

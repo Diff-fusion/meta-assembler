@@ -235,6 +235,7 @@ class Encoding3re(Encoding):
         ]
     modifiers = {
         "S": 13,
+        "P": 0,
         }
     L2 = 16
 
@@ -256,8 +257,10 @@ class Encoding2re(Encoding):
         RE(UCD, 17, 3, unit_base=26, unit_size=1, split_base=8, split_size=2),
         ]
     modifiers = {
+        "P": 7,
         "S": 13,
         }
+    L2 = 3
 
 ## 2 register source core
 class Encoding2rs(Encoding):
@@ -302,6 +305,7 @@ class Encoding2rie(Encoding):
         ]
     modifiers = {
         "M": 17,
+        "P": 0,
         "S": 13,
         "T": 0,
         }
@@ -491,6 +495,7 @@ class Encoding3rdsp8e(Encoding):
         RE(UCS, 17, 3, split_base=8, split_size=2),
         ]
     modifiers = {
+        "P": 7,
         "S": 13,
         "T": 16,
         "U": 5,
